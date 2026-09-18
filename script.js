@@ -6,3 +6,15 @@ const box=document.querySelector('#lightbox');document.querySelectorAll('.zoom-i
 document.querySelector('#project-form')?.addEventListener('submit',e=>{e.preventDefault();const data=new FormData(e.currentTarget);const selected=e.currentTarget.querySelector('select[name=service]').selectedOptions[0].textContent;const subject='Projektanfrage: '+selected;const body='Guten Tag Mel Maler,\n\n'+data.get('message')+'\n\nName: '+data.get('name')+'\nE-Mail: '+data.get('email')+'\nLeistung: '+selected;window.location.href='mailto:info@melmaler.de?subject='+encodeURIComponent(subject)+'&body='+encodeURIComponent(body);document.querySelector('#form-status').textContent='Ihre Anfrage ist vorbereitet. Bitte senden Sie sie in Ihrem E-Mail-Programm ab. Falls sich kein Programm öffnet, schreiben Sie direkt an info@melmaler.de.'});
 const year=document.querySelector('#year');if(year)year.textContent=new Date().getFullYear();
 const serviceSelect=document.querySelector('select[name=service]');const requestedService=new URLSearchParams(window.location.search).get('leistung');if(serviceSelect&&[...serviceSelect.options].some(o=>o.value===requestedService))serviceSelect.value=requestedService;
+
+// Decorative motion never hides content or prevents navigation.
+const motionPreference=window.matchMedia('(prefers-reduced-motion: reduce)');
+if(!motionPreference.matches&&'IntersectionObserver' in window){
+ const observer=new IntersectionObserver(entries=>{entries.forEach(entry=>{if(entry.isIntersecting){entry.target.classList.add('is-revealed');observer.unobserve(entry.target)}})},{threshold:.12});
+ document.querySelectorAll('.section-head,.service,.detail-grid article,.process-grid article,.living-copy,.material-demo,.about-copy,.page-cta>div').forEach((el,i)=>{el.classList.add('reveal-once');el.style.setProperty('--reveal-delay',`${Math.min(i%4,3)*65}ms`);observer.observe(el)});
+ motionPreference.addEventListener('change',event=>{if(event.matches)observer.disconnect()});
+}
+const progress=document.createElement('div');progress.className='scroll-progress';progress.setAttribute('aria-hidden','true');document.body.append(progress);let scrollScheduled=false;
+function updateProgress(){const distance=document.documentElement.scrollHeight-window.innerHeight;progress.style.transform=`scaleX(${distance>0?Math.min(1,Math.max(0,window.scrollY/distance)):0})`;scrollScheduled=false}
+window.addEventListener('scroll',()=>{if(!scrollScheduled){scrollScheduled=true;requestAnimationFrame(updateProgress)}},{passive:true});window.addEventListener('resize',updateProgress);updateProgress();
+document.querySelectorAll('.material-demo').forEach(demo=>{demo.querySelectorAll('.palette-choice').forEach(button=>{button.addEventListener('click',()=>{demo.style.setProperty('--sample',button.dataset.color);demo.querySelectorAll('.palette-choice').forEach(other=>other.setAttribute('aria-pressed',String(other===button)));demo.querySelector('.palette-label').textContent=button.dataset.label})})});
