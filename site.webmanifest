@@ -1,0 +1,14 @@
+{
+  "name": "MEL – wir renovieren",
+  "short_name": "MEL",
+  "description": "Renovierung, Malerarbeiten, Trockenbau und Böden in Puchheim.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#f5f2ec",
+  "theme_color": "#f5f2ec",
+  "icons": [
+    { "src": "assets/icon-192.png", "type": "image/png", "sizes": "192x192" },
+    { "src": "assets/icon-512.png", "type": "image/png", "sizes": "512x512" },
+    { "src": "assets/favicon.svg", "type": "image/svg+xml", "sizes": "any", "purpose": "any" }
+  ]
+}
