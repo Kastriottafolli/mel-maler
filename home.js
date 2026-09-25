@@ -26,12 +26,12 @@
     pause?.addEventListener('click', () => {
       paused = !paused;
       pause.setAttribute('aria-pressed', String(paused));
-      pause.textContent = paused ? '▶' : '❚❚';
+      pause.innerHTML = paused ? '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5.2v13.6c0 .9 1 1.5 1.8 1L19.5 13c.7-.5.7-1.5 0-2L9.8 4.2C9 3.7 8 4.3 8 5.2z"/></svg>' : '<svg viewBox="0 0 24 24" aria-hidden="true"><rect x="7" y="5" width="3.6" height="14" rx="1.2"/><rect x="13.4" y="5" width="3.6" height="14" rx="1.2"/></svg>';
       pause.setAttribute('aria-label', paused ? 'Bildwechsel fortsetzen' : 'Bildwechsel pausieren');
       show(i);
       paused ? stop() : start();
     });
-    if (paused) { pause.setAttribute('aria-pressed', 'true'); pause.textContent = '▶'; }
+    if (paused) { pause.setAttribute('aria-pressed', 'true'); pause.innerHTML = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5.2v13.6c0 .9 1 1.5 1.8 1L19.5 13c.7-.5.7-1.5 0-2L9.8 4.2C9 3.7 8 4.3 8 5.2z"/></svg>'; }
     show(0);
     if (io) {
       new IntersectionObserver(e => e[0].isIntersecting ? start() : stop(), { threshold: .2 }).observe(cinema);

@@ -14,6 +14,9 @@ Alle HTML-Dateien, styles.css, script.js, tools.js, robots.txt, sitemap.xml und 
 - Die Kontaktfunktion öffnet das E-Mail-Programm. Sie sendet nicht automatisch und benötigt keinen Server. Für ein direkt versendendes Formular später einen Formular-Dienst oder eigenen Endpunkt anbinden.
 - Das Logo liegt als Vektorgrafik vor (`assets/mel-logo.svg`, aus der Original-PDF erzeugt) und wird in Kopf- und Fußzeile verwendet. Daraus abgeleitet sind Favicon (`assets/favicon.svg`, `favicon.ico`), App-Icons und `site.webmanifest`.
 
+## Urheber der Website
+Konzept, Gestaltung und Entwicklung: Kastriot Tafolli, Softwareingenieur – www.tafolli.net (im Impressum ausgewiesen).
+
 ## Gestaltung
 Apple-inspirierte Reduktion: warmer Off-White-Hintergrund, dunkles Grün, Terrakotta-Akzente, großzügige Typografie. Responsive Navigation, Bild-Großansicht, zugängliche Fokusmarkierungen, reduzierte Bewegung nach Systemeinstellung. Keine erfundenen Kundenbewertungen.
 
@@ -40,3 +43,6 @@ Alle Zahlen auf der Startseite sind nachprüfbar (Anzahl Leistungen, Rechner, Pr
 `assets/mel-logo.svg` ist das freigestellte Vektorlogo (MeL mit orangem „e" und Schriftzug „...wir renovieren"), `assets/mel-logo-light.svg` die helle Variante für dunkle Flächen. Auf der Startseite wird dasselbe Logo als Inline-SVG im Hero eingebunden und animiert: Die Konturen zeichnen sich nach, dann laufen die Flächen ein, das orange „e" springt hinein und der Schriftzug wird von links nach rechts aufgedeckt. Danach erscheinen Zeile für Zeile Überschrift, Text und Buttons. Bei aktivierter Systemeinstellung „Bewegung reduzieren" ist sofort der Endzustand sichtbar.
 
 Die Kennzahlen direkt unter dem Hero (15+ Jahre, 250+ Projekte, 150+ Kunden, 1 Ansprechpartner) stammen vom Betrieb selbst und sollten bei Änderungen in `index.html` im Abschnitt `.hero-stats` angepasst werden.
+
+## Symbole
+Auf der Seite werden keine Unicode-Sonderzeichen mehr als Symbole verwendet. iOS stellt Zeichen wie U+2733 als farbiges Emoji dar und ignoriert dabei die CSS-Farbe – daraus wurde ein großes grünes Sternchen im Über-uns-Bereich. Stern, Telefonhörer, Pause/Play, Schließen-Kreuz und Häkchen sind deshalb Inline-SVG bzw. SVG-Data-URIs. Neue Symbole bitte ebenfalls als SVG einbauen, nicht als Zeichen.
