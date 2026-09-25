@@ -49,8 +49,15 @@ h1{font-weight:550;letter-spacing:-5px}h2{font-weight:500}em{font-family:inherit
 .footer-contact a{background:#fff;padding:22px 24px;font-size:15px;line-height:1.35}
 .footer-contact span{display:block;margin-bottom:8px;font-size:9px;letter-spacing:1.6px;text-transform:uppercase;color:var(--orange);font-weight:700}
 .footer-contact a:hover{background:#f4f0e9}
+.mel-kompakt{display:grid;grid-template-columns:.78fr 1.22fr;gap:9%;align-items:center;background:#e9e6de}
+.mel-kompakt .eyebrow{margin-bottom:18px}
+.mel-kompakt h2{margin-bottom:22px}
+.mel-kompakt p:not(.eyebrow){max-width:350px;font-size:14px;line-height:1.8;color:var(--muted);margin-bottom:20px}
+.mel-kompakt figure{margin:0;padding:20px;background:#fff;border:1px solid var(--line);border-radius:20px;box-shadow:0 16px 35px #242c2808}
+.mel-kompakt figure img{width:100%;border-radius:10px}
+.mel-kompakt figcaption{padding:14px 4px 0;font-size:10px;letter-spacing:1.3px;color:var(--muted)}
 .logo-crop{width:132px;height:54px;mix-blend-mode:normal}
 .logo-crop img{position:static;width:100%;height:100%;max-width:100%;object-fit:contain;object-position:left center}
 .brand-caption{display:none!important}
-@media(max-width:1050px){.top-contact{justify-content:flex-start;overflow:auto;white-space:nowrap}.proof-band{grid-template-columns:repeat(2,1fr)}.proof-band article{padding:28px}.route-card{grid-template-columns:1fr;gap:28px}.footer-contact{grid-template-columns:1fr}}
-@media(max-width:700px){.top-contact{padding:9px 6%;font-size:10px;gap:18px}.header nav{top:94px}.proof-band{grid-template-columns:1fr}.proof-band article{min-height:0;padding:24px 6%}.proof-band strong{font-size:20px;margin:16px 0 8px}.contact-quick a{width:100%;min-width:0}.route-panel{padding:24px}.route-panel p{font-size:23px}.footer-contact a{padding:18px 20px}.footer-top p{max-width:100%}}
+@media(max-width:1050px){.top-contact{justify-content:flex-start;overflow:auto;white-space:nowrap}.proof-band{grid-template-columns:repeat(2,1fr)}.proof-band article{padding:28px}.route-card,.mel-kompakt{grid-template-columns:1fr;gap:28px}.footer-contact{grid-template-columns:1fr}}
+@media(max-width:700px){.top-contact{padding:9px 6%;font-size:10px;gap:18px}.header nav{top:94px}.proof-band{grid-template-columns:1fr}.proof-band article{min-height:0;padding:24px 6%}.proof-band strong{font-size:20px;margin:16px 0 8px}.contact-quick a{width:100%;min-width:0}.route-panel{padding:24px}.route-panel p{font-size:23px}.mel-kompakt figure{padding:13px;border-radius:15px}.footer-contact a{padding:18px 20px}.footer-top p{max-width:100%}}
