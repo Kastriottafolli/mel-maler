@@ -49,5 +49,8 @@ h1{font-weight:550;letter-spacing:-5px}h2{font-weight:500}em{font-family:inherit
 .footer-contact a{background:#fff;padding:22px 24px;font-size:15px;line-height:1.35}
 .footer-contact span{display:block;margin-bottom:8px;font-size:9px;letter-spacing:1.6px;text-transform:uppercase;color:var(--orange);font-weight:700}
 .footer-contact a:hover{background:#f4f0e9}
+.logo-crop{width:132px;height:54px;mix-blend-mode:normal}
+.logo-crop img{position:static;width:100%;height:100%;max-width:100%;object-fit:contain;object-position:left center}
+.brand-caption{display:none!important}
 @media(max-width:1050px){.top-contact{justify-content:flex-start;overflow:auto;white-space:nowrap}.proof-band{grid-template-columns:repeat(2,1fr)}.proof-band article{padding:28px}.route-card{grid-template-columns:1fr;gap:28px}.footer-contact{grid-template-columns:1fr}}
 @media(max-width:700px){.top-contact{padding:9px 6%;font-size:10px;gap:18px}.header nav{top:94px}.proof-band{grid-template-columns:1fr}.proof-band article{min-height:0;padding:24px 6%}.proof-band strong{font-size:20px;margin:16px 0 8px}.contact-quick a{width:100%;min-width:0}.route-panel{padding:24px}.route-panel p{font-size:23px}.footer-contact a{padding:18px 20px}.footer-top p{max-width:100%}}
