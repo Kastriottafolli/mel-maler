@@ -30,3 +30,8 @@ Jede Leistungsseite hat ein eigenes Werkzeug (Abschnitt `#rechner`, Logik in `to
 Nach Änderungen an CSS oder JavaScript die Versionsnummer `?v=` in allen HTML-Dateien erhöhen, damit Browser keine alte Version aus dem Cache laden.
 
 `assets/projekte/renovierung-rohbau-umbau.jpg` wird als „Symbolbild Umbau" gekennzeichnet, da es nicht eindeutig als MEL-Projekt erkennbar ist. Nutzungsrechte bitte bestätigen.
+
+## Startseite
+Die Startseite ist als Erlebnis aufgebaut: Kino-Hero mit vier echten Projektfotos (automatischer Wechsel, pausierbar, `assets/hero/`), Schnelleinstieg, Leistungsraster, Projekt-Konfigurator (drei Fragen bis zur fertigen Anfrage, `home.js`), Leistungsfinder, Scroll-Story über den Projektablauf, Vorher/Nachher-Slider, Rechner-Übersicht, Kennzahlen, Projektgalerie, Farbwelt-Demo, FAQ und Abschluss-CTA. Telefonnummer und Anfrage sind durchgehend erreichbar: im Hero, in der eingeblendeten Sprungleiste (Desktop) und in der festen Leiste unten (Handy).
+
+Alle Zahlen auf der Startseite sind nachprüfbar (Anzahl Leistungen, Rechner, Projektfotos). Es gibt bewusst keine erfundenen Kundenbewertungen oder Auszeichnungen.
