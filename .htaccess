@@ -1,0 +1,13 @@
+# DreamHost / Apache settings for the MEL static website.
+DirectoryIndex index.html
+Options -Indexes
+AddDefaultCharset UTF-8
+
+<IfModule mod_headers.c>
+    Header always set X-Content-Type-Options "nosniff"
+    Header always set Referrer-Policy "strict-origin-when-cross-origin"
+</IfModule>
+
+<IfModule mod_deflate.c>
+    AddOutputFilterByType DEFLATE text/html text/plain text/css application/javascript application/json image/svg+xml
+</IfModule>

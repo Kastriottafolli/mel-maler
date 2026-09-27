@@ -62,3 +62,10 @@ Der Player ist selbst gebaut (`home.js`): großer Startknopf im Pausenzustand, B
 
 ## Symbole in Buttons
 `.button span` ist spezifischer als `.btn-ico` und überschrieb dessen `display:grid` – dadurch saß das Telefonsymbol am oberen Rand seines Kreises statt mittig. Am Ende von `styles.css` steht deshalb eine Regel mit höherer Spezifität (`.button .btn-ico`), die die Zentrierung erzwingt. Bei neuen Symbolen in Buttons bitte darauf achten.
+
+
+## DreamHost deployment
+
+Production domain: `https://www.mel-maler.de/`. Hosted on the existing DreamHost Web Hosting Launch plan (Amsterdam), in the `mel-maler.de` web directory. Upload the root HTML, CSS, JavaScript, favicon, manifest, robots.txt, sitemap.xml, `.htaccess`, and `assets/`. Do not upload `.git` or local deployment tools. The contact email remains `info@melmaler.de`; this is separate from the website domain.
+
+The `.htaccess` file sets UTF-8, disables directory listings, enables supported text compression, and adds basic response headers. HTTPS and the preferred domain are managed in DreamHost.
