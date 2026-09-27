@@ -22,6 +22,12 @@ Apple-inspirierte Reduktion: warmer Off-White-Hintergrund, dunkles Grün, Terrak
 
 Die verwendeten Raum- und Materialbilder wurden mit KI generiert und als Inspiration gekennzeichnet. Sie sind keine Referenzprojekte. Die Originalbilder von Squarespace werden im neuen Design nicht verwendet; übernommen wurde das MEL-Logo.
 
+## Zweite Website im selben Verzeichnis: `fb-handel/`
+
+Der Ordner `fb-handel/` enthält eine eigenständige Website für **FB Handel und Montagebetrieb**
+(Fenster und Türen, Bayerbach). Sie hat eigenes Design, eigene Styles und eigene Skripte und
+teilt nichts mit der Mel-Maler-Seite. Details stehen in `fb-handel/README.md`.
+
 ## Seitenstruktur
 Startseite, Leistungsübersicht, Rechner-Übersicht (rechner.html), neun Leistungsseiten (Malerarbeiten, Lackierarbeiten, Trockenbau, Renovierung, Parkett/Böden, Bodenbeschichtungen, Fassaden, Tapezieren), Über uns, Inspiration und Kontakt. Alle Seiten nutzen dieselben Styles und Navigation. Die Kontaktseite übernimmt die Leistung aus dem Anfrage-Link.
 
