@@ -46,3 +46,10 @@ Die Kennzahlen direkt unter dem Hero (15+ Jahre, 250+ Projekte, 150+ Kunden, 1 A
 
 ## Symbole
 Auf der Seite werden keine Unicode-Sonderzeichen mehr als Symbole verwendet. iOS stellt Zeichen wie U+2733 als farbiges Emoji dar und ignoriert dabei die CSS-Farbe – daraus wurde ein großes grünes Sternchen im Über-uns-Bereich. Stern, Telefonhörer, Pause/Play, Schließen-Kreuz und Häkchen sind deshalb Inline-SVG bzw. SVG-Data-URIs. Neue Symbole bitte ebenfalls als SVG einbauen, nicht als Zeichen.
+
+## Vorher/Nachher-Video
+`assets/video/vorher-nachher.mp4` (H.264, 23 s, ohne Ton) und `vorher-nachher.webm` (VP9, kleinere Zweitquelle) zeigen denselben Wohnungsrundgang zweimal: fünf Räume abwechselnd im Rohbau und nach der Fertigstellung, verbunden durch Wischblenden, mit eingebrannten Marken „Vorher"/„Nachher" und dem MEL-Logo.
+
+Erzeugt wurde der Schnitt aus zwei Handyvideos mit `ffmpeg`; das Aufbauskript liegt nicht im Repo. Die Zeitpunkte sind so gewählt, dass beim Umblenden in beiden Aufnahmen dieselbe Stelle zu sehen ist. Für einen neuen Schnitt: je fünf Segmente à 2,7 s aus beiden Quellen schneiden, Marken als PNG überlagern und mit `xfade` (wiperight zwischen Vorher/Nachher, fade zwischen den Paaren) verketten.
+
+Das Video startet stumm, sobald der Abschnitt im Bild ist, pausiert beim Wegscrollen und lässt sich antippen. Bei „Bewegung reduzieren" startet es nicht von selbst. Das Vorschaubild `vorher-nachher-poster.jpg` zeigt beide Zustände diagonal geteilt und wird vor dem Start angezeigt – das Video selbst lädt erst beim Abspielen (`preload="none"`).

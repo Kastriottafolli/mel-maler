@@ -153,3 +153,50 @@
     }));
   }
 })();
+
+/* ---------- Vorher/Nachher-Video ---------- */
+(() => {
+  const frame = document.querySelector('.bv-frame');
+  if (!frame) return;
+  const video = frame.querySelector('.bv-video');
+  const btn = frame.querySelector('.bv-play');
+  const bar = frame.querySelector('.bv-bar i');
+  const rooms = [...document.querySelectorAll('.bv-rooms li')];
+  const CUES = [0, 4.6, 9.4, 14.1, 18.6];
+
+  const toggle = () => {
+    if (video.paused) {
+      video.play().then(() => frame.classList.add('is-playing')).catch(() => {});
+    } else {
+      video.pause();
+      frame.classList.remove('is-playing');
+    }
+  };
+  btn.addEventListener('click', toggle);
+  video.addEventListener('click', toggle);
+  video.addEventListener('pause', () => frame.classList.remove('is-playing'));
+  video.addEventListener('play', () => frame.classList.add('is-playing'));
+  video.addEventListener('timeupdate', () => {
+    if (video.duration) bar.style.width = (video.currentTime / video.duration * 100) + '%';
+    let i = 0;
+    while (i + 1 < CUES.length && video.currentTime >= CUES[i + 1]) i++;
+    rooms.forEach((li, k) => li.classList.toggle('is-on', k === i));
+  });
+  video.addEventListener('ended', () => { bar.style.width = '0%'; rooms.forEach(li => li.classList.remove('is-on')); });
+
+  // Startet von selbst, sobald der Abschnitt im Bild ist – stumm, wie es Browser verlangen.
+  if (!reduced && 'IntersectionObserver' in window) {
+    let auto = true;
+    btn.addEventListener('click', () => { auto = false; });
+    video.addEventListener('click', () => { auto = false; });
+    new IntersectionObserver(entries => {
+      entries.forEach(en => {
+        if (en.isIntersecting) {
+          if (auto && video.paused) video.play().catch(() => {});
+        } else if (!video.paused) {
+          video.pause();
+        }
+      });
+    }, { threshold: .55 }).observe(frame);
+  }
+})();
