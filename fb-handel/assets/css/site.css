@@ -224,6 +224,66 @@ p { margin: 0 0 1em; }
 .hero-badge b { display: inline-flex; align-items: center; padding: 3px 9px; border-radius: 999px; background: var(--amber); color: #23180a; font-size: 12px; letter-spacing: .02em; }
 .hero-sub { font-size: 15px; color: var(--muted-2); margin-top: 20px; }
 
+/* ---------- Logo-Animation im Hero ----------
+   Die Konturen zeichnen sich nach, dann laufen die Flaechen ein, die Fluegel
+   schwingen auf, F und B springen hinein, zuletzt wird der Schriftzug
+   von links nach rechts aufgedeckt. */
+.brand-anim {
+  width: clamp(168px, 22vw, 248px);
+  height: auto;
+  color: #fff;
+  margin: 0 0 26px;
+  overflow: visible;
+}
+.brand-anim path { fill: currentColor; }
+
+.brand-anim .lg-frame path {
+  fill-opacity: 0;
+  stroke: var(--amber);
+  stroke-width: 2.4;
+  stroke-linejoin: round;
+  stroke-dasharray: var(--len, 1400);
+  stroke-dashoffset: var(--len, 1400);
+  vector-effect: non-scaling-stroke;
+}
+.brand-anim .lg-wing { transform-box: fill-box; }
+.brand-anim .lg-wing-l { transform-origin: 100% 50%; }
+.brand-anim .lg-wing-r { transform-origin: 0% 50%; }
+.brand-anim .lg-letters {
+  opacity: 0;
+  transform-box: fill-box; transform-origin: 50% 50%;
+  transform: translateY(7px) scale(.86);
+}
+.brand-anim .lg-word { clip-path: inset(0 100% 0 0); }
+
+.brand-anim.go .lg-frame path {
+  animation:
+    lgDraw 1s var(--ease) forwards calc(.12s + var(--i) * .16s),
+    lgFill .5s ease-out forwards calc(.92s + var(--i) * .16s);
+}
+.brand-anim.go .lg-wing { animation: lgWing .9s var(--ease-out) forwards .45s; }
+.brand-anim.go .lg-letters { animation: lgPop .7s var(--ease-out) forwards 1.45s; }
+.brand-anim.go .lg-word { animation: lgWipe .8s var(--ease-out) forwards 1.8s; }
+
+@keyframes lgDraw { to { stroke-dashoffset: 0; } }
+@keyframes lgFill { to { fill-opacity: 1; stroke-width: 0; } }
+@keyframes lgWing { from { transform: scaleX(.06); } to { transform: none; } }
+@keyframes lgPop  { to { opacity: 1; transform: none; } }
+@keyframes lgWipe { to { clip-path: inset(0 0 0 0); } }
+
+/* Endzustand, wenn nicht animiert wird */
+.brand-anim.static .lg-frame path { fill-opacity: 1; stroke-width: 0; stroke-dashoffset: 0; }
+.brand-anim.static .lg-letters { opacity: 1; transform: none; }
+.brand-anim.static .lg-word { clip-path: none; }
+
+/* Der Hero-Text laeuft parallel zum Logo an */
+.hero-in [data-reveal] { transition-delay: .5s; }
+.hero-in [data-reveal][data-delay="1"] { transition-delay: .62s; }
+.hero-in [data-reveal][data-delay="2"] { transition-delay: .76s; }
+.hero-in [data-reveal][data-delay="3"] { transition-delay: .9s; }
+.hero-in [data-reveal][data-delay="4"] { transition-delay: 1.04s; }
+@media (max-width: 640px) { .brand-anim { margin-bottom: 20px; } }
+
 /* ---------- Kennzahlen ---------- */
 .stats { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1px; background: var(--line); border-radius: var(--r-m); overflow: hidden; }
 .dark .stats, .dark-2 .stats { background: var(--night-line); }
@@ -630,6 +690,11 @@ input[type="range"] { width: 100%; accent-color: var(--amber); height: 30px; }
   [data-reveal] { opacity: 1; transform: none; }
   .anatomy .anatomy-svg .layer { transform: translate(var(--tx), var(--ty)); }
   .anatomy .anatomy-svg .layer-label { opacity: 1; transform: none; }
+  .brand-anim .lg-frame path { fill-opacity: 1; stroke-width: 0; stroke-dashoffset: 0; }
+  .brand-anim .lg-wing { transform: none; }
+  .brand-anim .lg-letters { opacity: 1; transform: none; }
+  .brand-anim .lg-word { clip-path: none; }
+  .hero-in [data-reveal] { transition-delay: 0s; }
 }
 @media print {
   .head, .action-bar, .foot, .btn { display: none !important; }

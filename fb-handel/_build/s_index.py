@@ -3,6 +3,7 @@ from chrome import *
 import io, json
 
 ANATOMY = io.open("anatomy.svg", encoding="utf-8").read()
+LOGO = io.open("logo-inline.svg", encoding="utf-8").read()
 
 FAQ = [
  ("Was kostet ein neues Fenster?",
@@ -82,6 +83,7 @@ def build():
     <img src="assets/img/grossfenster-abend-1600.webp" alt="Gro\u00dfes Fenster mit grauem Rahmen in der Abendd\u00e4mmerung" fetchpriority="high" width="1024" height="768">
   </div>
   <div class="wrap hero-in">
+    {logo}
     <span class="hero-badge" data-reveal><b>Seit 2022</b> Fenster &middot; Türen &middot; Böden in Bayerbach</span>
     <h1 class="display" data-reveal data-delay="1">Wärme bleibt drin.<br><span class="grad-text">Lärm bleibt draußen.</span></h1>
     <p class="lead" data-reveal data-delay="2">Wir liefern und montieren Fenster, Türen, Böden und Insektenschutz – in Bayerbach, im Rottal und rund um Passau. Zwei gelernte Handwerker, ein Ansprechpartner, eine saubere Baustelle.</p>
@@ -390,7 +392,7 @@ def build():
 {cta}
 {lightbox}
 """.format(
-        telh=TEL_HREF, telt=TEL_TXT, phone=ICON["phone"], check=ICON["check"], drag=ICON["drag"],
+        logo=LOGO, telh=TEL_HREF, telt=TEL_TXT, phone=ICON["phone"], check=ICON["check"], drag=ICON["drag"],
         ic_floor=ICON["floor"], ic_bug=ICON["bug"], ic_tools=ICON["tools"],
         anatomy=ANATOMY,
         img_fenster=img("grossfenster-abend", "Großes Fenster mit grauem Rahmen in der Abenddämmerung", sizes="(max-width: 900px) 100vw, 50vw", w=1024, h=768),

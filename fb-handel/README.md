@@ -67,6 +67,33 @@ Die Zeichnung wird von `_build/gen_anatomy.py` erzeugt (Geometrie, Schichtdicken
 und liegt als `_build/anatomy.svg` bereit. Nach Änderungen: `python3 _build/gen_anatomy.py`
 im Ordner `_build`, dann `python3 _build/build.py`.
 
+## Logo-Animation im Hero
+
+Das Logo des Betriebs lag nur als PNG mit 500 Pixel Breite vor und war in der Kopfzeile
+sichtbar unscharf. Es ist jetzt eine Vektorgrafik (`assets/img/logo.svg` für helle,
+`logo-light.svg` für dunkle Flächen) und damit in jeder Größe scharf.
+
+Auf der Startseite steht dasselbe Logo als Inline-SVG über der Überschrift und baut sich
+beim Laden auf:
+
+1. Die Konturen zeichnen sich in Bernstein nach – erst die beiden Kästen mit F und B,
+   dann die Flügel.
+2. Die Flügel schwingen dabei aus der geschlossenen Stellung auf, das Fenster öffnet sich.
+3. Die Flächen laufen ein, die Kontur verschwindet.
+4. F und B springen hinein.
+5. Der Schriftzug „Handel & Montagebetrieb“ wird von links nach rechts aufgedeckt.
+
+Parallel dazu steigen Badge, Überschrift, Text und Schaltflächen nacheinander ein.
+Bei der Systemeinstellung „Bewegung reduzieren“ erscheint sofort der Endzustand.
+
+Technisch: reine CSS-Animationen mit gestaffelten Verzögerungen. `site.js` misst je Pfad die
+Länge mit `getTotalLength()` und setzt sie als CSS-Variable `--len`, damit sich die
+Strichlinie sauber abrollt. Keine Bibliothek.
+
+Die Vektorfassung entstand aus dem PNG: hochskalieren, weichzeichnen, `potrace`, danach
+Kurven auflösen und mit Douglas-Peucker vereinfachen. Die Skripte dafür sind nicht Teil der
+Website; die fertige Inline-Fassung liegt in `_build/logo-inline.svg`.
+
 ## Rechner
 
 - **Schallschutz-Rechner** (`#schall`, `assets/js/tools.js`): Außenpegel und Fensteraufbau →

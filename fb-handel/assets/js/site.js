@@ -76,6 +76,25 @@
     io.observe(el);
   });
 
+  /* ---------- Logo-Animation im Hero ---------- */
+  var mark = $(".brand-anim");
+  if (mark) {
+    var mpaths = $$(".lg-frame path", mark);
+    mpaths.forEach(function (path) {
+      var len = 1400;
+      try { if (path.getTotalLength) len = Math.ceil(path.getTotalLength()); } catch (e) {}
+      path.style.setProperty("--len", len);
+    });
+    if (reduced) {
+      mark.classList.add("static");
+    } else {
+      /* erst starten, wenn das Layout steht, sonst springt die Strichlaenge */
+      requestAnimationFrame(function () {
+        requestAnimationFrame(function () { mark.classList.add("go"); });
+      });
+    }
+  }
+
   /* ---------- Anatomie eines Fensters ---------- */
   var ana = $(".anatomy");
   if (ana) {

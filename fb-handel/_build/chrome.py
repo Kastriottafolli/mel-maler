@@ -9,7 +9,7 @@ MAIL = "fbmontagebetrieb@gmx.de"
 STRASSE = "Au 21a"
 PLZ = "94137"
 ORT = "Bayerbach"
-VER = "1"
+VER = "2"
 
 NAV = [
     ("leistungen.html", "Leistungen"),
@@ -82,7 +82,7 @@ def header(active):
     return """<header class="head">
   <div class="wrap head-in">
     <a class="brand" href="index.html" aria-label="{firma} – zur Startseite">
-      <img src="assets/img/logo.png" alt="{firma}" width="500" height="266">
+      <img src="assets/img/logo.svg" alt="{firma}" width="500" height="266">
     </a>
     <button class="burger" type="button" aria-expanded="false" aria-controls="hauptmenue" aria-label="Menü">
       <span></span>
@@ -115,7 +115,7 @@ def footer(scripts=("site.js",)):
   <div class="wrap">
     <div class="foot-grid">
       <div>
-        <img class="foot-logo" src="assets/img/logo-light.png" alt="{firma}" width="500" height="266">
+        <img class="foot-logo" src="assets/img/logo-light.svg" alt="{firma}" width="500" height="266">
         <p class="muted">Fenster, Türen, Böden und Insektenschutz für {ort} und den Landkreis Rottal-Inn. Zwei Handwerker, ein Ansprechpartner.</p>
       </div>
       <div>
