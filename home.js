@@ -154,48 +154,124 @@
   }
 })();
 
-/* ---------- Vorher/Nachher-Video ---------- */
+/* ---------- Vorher/Nachher-Video: eigener Player ---------- */
 (() => {
   const frame = document.querySelector('.bv-frame');
   if (!frame) return;
   const video = frame.querySelector('.bv-video');
-  const btn = frame.querySelector('.bv-play');
-  const bar = frame.querySelector('.bv-bar i');
+  const big = frame.querySelector('.bv-big');
+  const toggle = frame.querySelector('.bv-toggle');
+  const seek = frame.querySelector('.bv-seek');
+  const timeNow = frame.querySelector('.bv-time b');
+  const timeDur = frame.querySelector('.bv-dur');
+  const full = frame.querySelector('.bv-full');
   const rooms = [...document.querySelectorAll('.bv-rooms li')];
   const CUES = [0, 4.6, 9.4, 14.1, 18.6];
+  const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-  const toggle = () => {
-    if (video.paused) {
-      video.play().then(() => frame.classList.add('is-playing')).catch(() => {});
-    } else {
-      video.pause();
-      frame.classList.remove('is-playing');
-    }
+  const PLAY = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5.2v13.6c0 .9 1 1.5 1.8 1L19.5 13c.7-.5.7-1.5 0-2L9.8 4.2C9 3.7 8 4.3 8 5.2z"/></svg>';
+  const PAUSE = '<svg viewBox="0 0 24 24" aria-hidden="true"><rect x="6.5" y="4.5" width="4" height="15" rx="1.4"/><rect x="13.5" y="4.5" width="4" height="15" rx="1.4"/></svg>';
+
+  const mmss = s => {
+    if (!isFinite(s)) return '0:00';
+    const m = Math.floor(s / 60), r = Math.floor(s % 60);
+    return m + ':' + String(r).padStart(2, '0');
   };
-  btn.addEventListener('click', toggle);
-  video.addEventListener('click', toggle);
-  video.addEventListener('pause', () => frame.classList.remove('is-playing'));
-  video.addEventListener('play', () => frame.classList.add('is-playing'));
+
+  let hideTimer = 0, scrubbing = false;
+  const showControls = () => {
+    frame.classList.add('is-ui');
+    clearTimeout(hideTimer);
+    if (!video.paused) hideTimer = setTimeout(() => frame.classList.remove('is-ui'), 2600);
+  };
+  const play = () => video.play().catch(() => {});
+  const pause = () => video.pause();
+  const flip = () => (video.paused ? play() : pause());
+
+  video.addEventListener('play', () => {
+    frame.classList.add('is-playing');
+    toggle.innerHTML = PAUSE;
+    toggle.setAttribute('aria-label', 'Pause');
+    big.setAttribute('aria-label', 'Pause');
+    showControls();
+  });
+  video.addEventListener('pause', () => {
+    frame.classList.remove('is-playing');
+    toggle.innerHTML = PLAY;
+    toggle.setAttribute('aria-label', 'Abspielen');
+    big.setAttribute('aria-label', 'Video abspielen');
+    clearTimeout(hideTimer);
+    frame.classList.add('is-ui');
+  });
+
+  big.addEventListener('click', flip);
+  toggle.addEventListener('click', flip);
+  video.addEventListener('click', flip);
+  frame.addEventListener('pointermove', showControls);
+  frame.addEventListener('touchstart', showControls, { passive: true });
+  frame.addEventListener('focusin', showControls);
+
+  video.addEventListener('loadedmetadata', () => { timeDur.textContent = mmss(video.duration); });
   video.addEventListener('timeupdate', () => {
-    if (video.duration) bar.style.width = (video.currentTime / video.duration * 100) + '%';
+    if (!scrubbing && video.duration) seek.value = String(Math.round(video.currentTime / video.duration * 1000));
+    timeNow.textContent = mmss(video.currentTime);
+    seek.style.setProperty('--p', (video.duration ? video.currentTime / video.duration * 100 : 0) + '%');
     let i = 0;
     while (i + 1 < CUES.length && video.currentTime >= CUES[i + 1]) i++;
     rooms.forEach((li, k) => li.classList.toggle('is-on', k === i));
   });
-  video.addEventListener('ended', () => { bar.style.width = '0%'; rooms.forEach(li => li.classList.remove('is-on')); });
 
-  // Startet von selbst, sobald der Abschnitt im Bild ist – stumm, wie es Browser verlangen.
-  if (!reduced && 'IntersectionObserver' in window) {
+  const scrub = () => {
+    if (!video.duration) return;
+    video.currentTime = seek.value / 1000 * video.duration;
+    seek.style.setProperty('--p', seek.value / 10 + '%');
+  };
+  seek.addEventListener('input', () => { scrubbing = true; scrub(); showControls(); });
+  seek.addEventListener('change', () => { scrubbing = false; scrub(); });
+  ['pointerup', 'touchend', 'mouseup'].forEach(e => seek.addEventListener(e, () => { scrubbing = false; }));
+
+  rooms.forEach((li, k) => {
+    li.tabIndex = 0;
+    li.setAttribute('role', 'button');
+    li.setAttribute('aria-label', 'Zu Raum ' + (k + 1) + ' springen: ' + li.textContent.replace(/^\d+/, '').trim());
+    const jump = () => { video.currentTime = CUES[k] + 0.05; play(); showControls(); };
+    li.addEventListener('click', jump);
+    li.addEventListener('keydown', e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); jump(); } });
+  });
+
+  full.addEventListener('click', () => {
+    const doc = document;
+    if (doc.fullscreenElement || doc.webkitFullscreenElement) {
+      (doc.exitFullscreen || doc.webkitExitFullscreen).call(doc);
+      return;
+    }
+    if (frame.requestFullscreen) frame.requestFullscreen().catch(() => {});
+    else if (frame.webkitRequestFullscreen) frame.webkitRequestFullscreen();
+    else if (video.webkitEnterFullscreen) video.webkitEnterFullscreen();   // iPhone
+  });
+  ['fullscreenchange', 'webkitfullscreenchange'].forEach(e => document.addEventListener(e, () => {
+    const on = document.fullscreenElement === frame || document.webkitFullscreenElement === frame;
+    frame.classList.toggle('is-full', on);
+    full.setAttribute('aria-label', on ? 'Vollbild beenden' : 'Vollbild');
+  }));
+
+  frame.addEventListener('keydown', e => {
+    if (e.target === seek) return;
+    if (e.key === ' ' || e.key === 'k') { e.preventDefault(); flip(); showControls(); }
+    if (e.key === 'ArrowRight') { video.currentTime = Math.min(video.duration, video.currentTime + 5); showControls(); }
+    if (e.key === 'ArrowLeft') { video.currentTime = Math.max(0, video.currentTime - 5); showControls(); }
+  });
+
+  frame.classList.add('is-ui');
+
+  // Startet stumm, sobald der Abschnitt im Bild ist; wer selbst eingreift, behält die Kontrolle.
+  if (!reduce && 'IntersectionObserver' in window) {
     let auto = true;
-    btn.addEventListener('click', () => { auto = false; });
-    video.addEventListener('click', () => { auto = false; });
+    [big, toggle, video, seek].forEach(el => el.addEventListener('pointerdown', () => { auto = false; }));
     new IntersectionObserver(entries => {
       entries.forEach(en => {
-        if (en.isIntersecting) {
-          if (auto && video.paused) video.play().catch(() => {});
-        } else if (!video.paused) {
-          video.pause();
-        }
+        if (en.isIntersecting) { if (auto && video.paused) play(); }
+        else if (!video.paused) pause();
       });
     }, { threshold: .55 }).observe(frame);
   }
