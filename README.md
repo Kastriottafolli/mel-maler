@@ -9,7 +9,7 @@ index.html im Browser öffnen oder in diesem Ordner `python3 -m http.server 8765
 Alle HTML-Dateien, styles.css, script.js, tools.js, robots.txt, sitemap.xml und den Ordner assets gemeinsam in das Webverzeichnis eines Hosting-Anbieters hochladen. Danach die eigene Domain mit dem Hosting verbinden und HTTPS aktivieren.
 
 ## Vor Veröffentlichung
-- Vollständigen rechtlichen Namen des Anbieters ergänzen. Impressum und Datenschutz sind ausdrücklich gekennzeichnete Entwürfe; nach Wahl des Hostings vervollständigen und prüfen.
+- Impressum und Datenschutz enthalten die vom Betrieb gelieferten Angaben (Geschäftsführer, Sitz, Steuernummer, Verantwortlicher). Bei einer Rechtsform mit Registereintrag oder vorhandener Umsatzsteuer-ID gehören diese Angaben zusätzlich ins Impressum.
 - Kontaktdaten und Nutzungsrechte der übernommenen Bilder bestätigen.
 - Die Kontaktfunktion öffnet das E-Mail-Programm. Sie sendet nicht automatisch und benötigt keinen Server. Für ein direkt versendendes Formular später einen Formular-Dienst oder eigenen Endpunkt anbinden.
 - Das Logo liegt als Vektorgrafik vor (`assets/mel-logo.svg`, aus der Original-PDF erzeugt) und wird in Kopf- und Fußzeile verwendet. Daraus abgeleitet sind Favicon (`assets/favicon.svg`, `favicon.ico`), App-Icons und `site.webmanifest`.
