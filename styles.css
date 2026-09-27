@@ -711,3 +711,17 @@ footer .logo-mark{width:104px}
 .bv-rooms li:focus-visible{outline:3px solid var(--orange);outline-offset:3px;border-radius:6px}
 @media(max-width:700px){.bv-ctrl{gap:9px;padding:10px 10px 11px}.bv-ctrl button{width:32px;height:32px}.bv-time{font-size:10px}}
 @media(prefers-reduced-motion:reduce){.bv-big:before,.bv-ctrl{transition:none}}
+
+/* Ton am Vorher/Nachher-Video */
+.bv-sound svg{width:19px;height:19px}
+.bv-unmute{position:absolute;top:12px;right:12px;z-index:2;display:flex;opacity:0;visibility:hidden;pointer-events:none;align-items:center;gap:7px;height:34px;padding:0 15px 0 11px;border:0;border-radius:999px;background:#0d1210cc;color:#fff;font-family:inherit;font-size:11px;font-weight:600;letter-spacing:.7px;text-transform:uppercase;line-height:1;cursor:pointer;-webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px);box-shadow:0 8px 20px #0000003d;transition:background .2s,transform .25s,opacity .25s,visibility .25s}
+.bv-unmute svg{width:16px;height:16px;fill:currentColor;flex:none}
+.bv-unmute:hover{background:var(--orange);transform:translateY(-1px)}
+.bv-unmute{transform:translateY(-4px) scale(.96)}
+.bv-unmute:focus-visible{outline:2px solid var(--orange);outline-offset:3px}
+.bv-frame.is-playing.is-hushed .bv-unmute{opacity:1;visibility:visible;pointer-events:auto;transform:none}
+.bv-unmute:after{content:"";position:absolute;inset:0;border-radius:999px;border:2px solid var(--orange);opacity:0;pointer-events:none}
+.bv-frame.is-playing.is-hushed .bv-unmute:after{animation:bvSound 2.6s ease-out 1.1s 3}
+@keyframes bvSound{0%{opacity:.85;transform:scale(1)}70%,100%{opacity:0;transform:scale(1.28)}}
+@media(max-width:700px){.bv-unmute{top:10px;right:10px;height:31px;padding:0 13px 0 9px;font-size:10px}}
+@media(prefers-reduced-motion:reduce){.bv-unmute{transition:none}.bv-frame.is-playing.is-hushed .bv-unmute:after{animation:none}}

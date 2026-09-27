@@ -165,12 +165,17 @@
   const timeNow = frame.querySelector('.bv-time b');
   const timeDur = frame.querySelector('.bv-dur');
   const full = frame.querySelector('.bv-full');
+  const sound = frame.querySelector('.bv-sound');
+  const hint = frame.querySelector('.bv-unmute');
   const rooms = [...document.querySelectorAll('.bv-rooms li')];
   const CUES = [0, 4.6, 9.4, 14.1, 18.6];
   const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
   const PLAY = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5.2v13.6c0 .9 1 1.5 1.8 1L19.5 13c.7-.5.7-1.5 0-2L9.8 4.2C9 3.7 8 4.3 8 5.2z"/></svg>';
   const PAUSE = '<svg viewBox="0 0 24 24" aria-hidden="true"><rect x="6.5" y="4.5" width="4" height="15" rx="1.4"/><rect x="13.5" y="4.5" width="4" height="15" rx="1.4"/></svg>';
+
+  const SPK = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 9.5h3.1l4.1-3.5c.6-.5 1.6-.1 1.6.7v10.6c0 .8-1 1.2-1.6.7l-4.1-3.5H4c-.6 0-1-.4-1-1v-3c0-.6.4-1 1-1z"/><path d="M16.4 8.9a4.6 4.6 0 010 6.2M19 6.5a8.1 8.1 0 010 11" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round"/></svg>';
+  const MUTE = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 9.5h3.1l4.1-3.5c.6-.5 1.6-.1 1.6.7v10.6c0 .8-1 1.2-1.6.7l-4.1-3.5H4c-.6 0-1-.4-1-1v-3c0-.6.4-1 1-1z"/><path d="M16.3 9.6l4.6 4.8M20.9 9.6l-4.6 4.8" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round"/></svg>';
 
   const mmss = s => {
     if (!isFinite(s)) return '0:00';
@@ -184,9 +189,63 @@
     clearTimeout(hideTimer);
     if (!video.paused) hideTimer = setTimeout(() => frame.classList.remove('is-ui'), 2600);
   };
-  const play = () => video.play().catch(() => {});
+
+  /* Ton. Autoplay erlauben Browser nur stumm, deshalb startet das Video
+     stumm. Wer es selbst startet oder den Lautsprecher drueckt, hoert die
+     Musik - sanft eingeblendet. Wer den Ton abwaehlt, behaelt es. */
+  const VOL = .85;
+  let wanted = null;            // null = noch nicht entschieden
+  let volTimer = 0;
+
+  let shown = null;              // Symbol nur bei echtem Wechsel neu setzen
+  const syncSound = () => {
+    const off = video.muted;
+    if (off !== shown) {
+      shown = off;
+      sound.innerHTML = off ? MUTE : SPK;
+      sound.setAttribute('aria-label', off ? 'Ton einschalten' : 'Ton ausschalten');
+      sound.setAttribute('aria-pressed', off ? 'false' : 'true');
+    }
+    frame.classList.toggle('is-hushed', off && wanted !== false);
+  };
+
+  const soundOn = () => {
+    wanted = true;
+    if (!video.muted) { syncSound(); return; }
+    video.muted = false;
+    clearInterval(volTimer);
+    if (reduce) video.volume = VOL;
+    else {
+      let v = video.volume = 0;
+      volTimer = setInterval(() => {
+        v = Math.min(VOL, v + VOL / 16);
+        video.volume = v;
+        if (v >= VOL) clearInterval(volTimer);
+      }, 25);
+    }
+    syncSound();
+  };
+  const soundOff = () => { clearInterval(volTimer); wanted = false; video.muted = true; syncSound(); };
+
+  const play = () => {
+    const p = video.play();
+    if (p && p.catch) p.catch(() => {
+      if (video.muted) return;            // stumm zurueckfallen und erneut versuchen
+      video.muted = true;
+      syncSound();
+      video.play().catch(() => {});
+    });
+  };
   const pause = () => video.pause();
   const flip = () => (video.paused ? play() : pause());
+  // Start durch den Besucher: dann darf der Ton beim ersten Mal mit.
+  const ownFlip = () => { if (video.paused && wanted === null) soundOn(); flip(); };
+
+  sound.addEventListener('click', () => { video.muted ? soundOn() : soundOff(); showControls(); });
+  // Fokus zuerst abgeben: verschwindet der Knopf mit dem Fokus darin,
+  // springt die Seite (Chrome scrollt dem verlorenen Fokus nach).
+  hint.addEventListener('click', () => { hint.blur(); soundOn(); play(); showControls(); });
+  video.addEventListener('volumechange', syncSound);
 
   video.addEventListener('play', () => {
     frame.classList.add('is-playing');
@@ -204,9 +263,17 @@
     frame.classList.add('is-ui');
   });
 
-  big.addEventListener('click', flip);
-  toggle.addEventListener('click', flip);
-  video.addEventListener('click', flip);
+  // Der Browser zieht einen frisch fokussierten Knopf mittig ins Bild -
+  // bei einer hohen Videokachel springt dabei die Seite. Fokus also selbst
+  // setzen, ohne Scrollen; Tastaturbedienung bleibt damit erhalten.
+  [big, toggle, sound, full, hint].forEach(el => el.addEventListener('mousedown', e => {
+    e.preventDefault();
+    try { el.focus({ preventScroll: true }); } catch (_) { el.focus(); }
+  }));
+
+  big.addEventListener('click', ownFlip);
+  toggle.addEventListener('click', ownFlip);
+  video.addEventListener('click', ownFlip);
   frame.addEventListener('pointermove', showControls);
   frame.addEventListener('touchstart', showControls, { passive: true });
   frame.addEventListener('focusin', showControls);
@@ -234,12 +301,13 @@
     li.tabIndex = 0;
     li.setAttribute('role', 'button');
     li.setAttribute('aria-label', 'Zu Raum ' + (k + 1) + ' springen: ' + li.textContent.replace(/^\d+/, '').trim());
-    const jump = () => { video.currentTime = CUES[k] + 0.05; play(); showControls(); };
+    const jump = () => { if (wanted === null) soundOn(); video.currentTime = CUES[k] + 0.05; play(); showControls(); };
     li.addEventListener('click', jump);
     li.addEventListener('keydown', e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); jump(); } });
   });
 
   full.addEventListener('click', () => {
+    if (wanted === null) soundOn();
     const doc = document;
     if (doc.fullscreenElement || doc.webkitFullscreenElement) {
       (doc.exitFullscreen || doc.webkitExitFullscreen).call(doc);
@@ -257,12 +325,14 @@
 
   frame.addEventListener('keydown', e => {
     if (e.target === seek) return;
-    if (e.key === ' ' || e.key === 'k') { e.preventDefault(); flip(); showControls(); }
+    if (e.key === ' ' || e.key === 'k') { e.preventDefault(); ownFlip(); showControls(); }
+    if (e.key === 'm') { video.muted ? soundOn() : soundOff(); showControls(); }
     if (e.key === 'ArrowRight') { video.currentTime = Math.min(video.duration, video.currentTime + 5); showControls(); }
     if (e.key === 'ArrowLeft') { video.currentTime = Math.max(0, video.currentTime - 5); showControls(); }
   });
 
   frame.classList.add('is-ui');
+  syncSound();
 
   // Startet stumm, sobald der Abschnitt im Bild ist; wer selbst eingreift, behält die Kontrolle.
   if (!reduce && 'IntersectionObserver' in window) {
