@@ -1,0 +1,15 @@
+# Interne Arbeitsdateien - nicht Bestandteil der Website.
+# Sperrt den Ordner fuer jeden Abruf ueber das Web, auch wenn er
+# versehentlich auf den Produktivserver ausgeliefert wird.
+Options -Indexes
+
+<IfModule mod_authz_core.c>
+    # Apache 2.4
+    Require all denied
+</IfModule>
+
+<IfModule !mod_authz_core.c>
+    # Apache 2.2
+    Order allow,deny
+    Deny from all
+</IfModule>
